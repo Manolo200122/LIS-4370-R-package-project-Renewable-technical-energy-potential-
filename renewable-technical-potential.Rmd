@@ -1,0 +1,76 @@
+---
+title: "renewable-technical-potential"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{renewable-technical-potential}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(renewablepossibilities)
+library(dplyr)
+library(ggplot2)
+```
+
+# Overview
+
+This vignette demonstrates how to explore U.S. renewable energy
+technical potential by state using the `usre_df` dataset from the
+`renewablepossibilities` package. The data include estimates of
+technical potential for multiple technologies (utility-scale solar,
+rooftop solar, wind, biopower, geothermal, and hydropower) for each
+state.
+
+Each column represents either an energy potential (for example, in GWh
+or GW), a land area requirement (km^2), or a count of sites. Together,
+these variables highlight where renewable resources are most abundant
+and which states have particularly large untapped potential.
+
+In the sections below, we first take a quick look at the structure of
+`usre_df`. We then create a simple visualization showing the top 10
+states by rooftop solar potential, illustrating how the dataset can
+support questions about where specific technologies might be most
+promising.
+
+## Peek at the data
+```{r setup}
+dplyr::glimpse(usre_df)
+
+```
+
+## Top 10 states by rooftop solar potential
+
+```{r}
+usre_df %>%
+slice_max(rooftop_pv_gwh, n = 10) %>%
+ggplot(aes(x = reorder(state, rooftop_pv_gwh),
+y = rooftop_pv_gwh)) +
+geom_col() +
+coord_flip() +
+labs(
+x = "State",
+y = "Rooftop PV potential (GWh)",
+title = "Top 10 states by rooftop solar technical potential"
+)
+```
+
+## Using a defensive summary function
+
+The package includes a small defensive helper, `usre_summary()`, which
+checks that the input data has a `state` column and that the requested
+variable exists and is numeric. This helps catch mistakes early, such as
+typos in column names or passing the wrong type of data.
+
+Below we use `usre_summary()` to extract the `rooftop_pv_gwh` column
+along with the state names:
+
+```{r}
+summary_rooftop <- usre_summary(usre_df, "rooftop_pv_gwh")
+head(summary_rooftop)
+```
+
