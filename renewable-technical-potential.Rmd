@@ -19,23 +19,9 @@ library(ggplot2)
 
 # Overview
 
-This vignette demonstrates how to explore U.S. renewable energy
-technical potential by state using the `usre_df` dataset from the
-`renewablepossibilities` package. The data include estimates of
-technical potential for multiple technologies (utility-scale solar,
-rooftop solar, wind, biopower, geothermal, and hydropower) for each
-state.
-
-Each column represents either an energy potential (for example, in GWh
-or GW), a land area requirement (km^2), or a count of sites. Together,
-these variables highlight where renewable resources are most abundant
-and which states have particularly large untapped potential.
-
-In the sections below, we first take a quick look at the structure of
-`usre_df`. We then create a simple visualization showing the top 10
-states by rooftop solar potential, illustrating how the dataset can
-support questions about where specific technologies might be most
-promising.
+This vignette shows how to explore US renewable energy technical
+potential by state using the `usre_df` dataset from the
+`renewablepossibilities` package.
 
 ## Peek at the data
 ```{r setup}
@@ -59,18 +45,4 @@ title = "Top 10 states by rooftop solar technical potential"
 )
 ```
 
-## Using a defensive summary function
-
-The package includes a small defensive helper, `usre_summary()`, which
-checks that the input data has a `state` column and that the requested
-variable exists and is numeric. This helps catch mistakes early, such as
-typos in column names or passing the wrong type of data.
-
-Below we use `usre_summary()` to extract the `rooftop_pv_gwh` column
-along with the state names:
-
-```{r}
-summary_rooftop <- usre_summary(usre_df, "rooftop_pv_gwh")
-head(summary_rooftop)
-```
 
